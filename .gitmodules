@@ -1,0 +1,6 @@
+[submodule "Requesty"]
+	path = client/src/Requesty
+	url = git@github.com:StevenVerheyen/Requesty.git
+[submodule "react-uikit"]
+	path = client/src/react-uikit
+	url = git@github.com:StevenVerheyen/react-uikit.git
