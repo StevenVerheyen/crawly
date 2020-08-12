@@ -1,2 +1,3 @@
-# poc-puppeteer
-A POC for Puppeteer
+# Crawly
+
+Crawl websites at ease.

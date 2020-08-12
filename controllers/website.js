@@ -47,7 +47,10 @@ exports.crawl = asyncHandler(async (req, res, next) => {
     await page.goto(website, { waitUntil: 'networkidle2' });
     await page.pdf(options);
     await browser.close();
-    await res.status(200).download(path);
+    await res.status(200).json({
+      success: true,
+      downloadUrl: `http://localhost:5000/pdfs/${fileName}`,
+    });
   } catch (error) {
     browser.close();
     return next(new ErrorResponse(`error generating pdf: ${error}`, 500));
