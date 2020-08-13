@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import GeneratePdfImage from '../assets/images/generate.png';
-import LabeledInputFieldText from '../react-uikit/Inputs/LabeledInputFieldText';
-import ButtonActionPrimary from '../react-uikit/Buttons/ButtonActionPrimary';
-import TextHead from '../react-uikit/Labels/TextHead';
-import { postCrawl } from '../Requesty';
+import LabeledInputFieldText from '../external/react-uikit/Inputs/LabeledInputFieldText';
+import ButtonActionPrimary from '../external/react-uikit/Buttons/ButtonActionPrimary';
+import TextHead from '../external/react-uikit/Labels/TextHead';
+import { postCrawl } from '../external/Requesty';
 
 export default function Home() {
   const [downloadPath, setDownloadPath] = useState('');
