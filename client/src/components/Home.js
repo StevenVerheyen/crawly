@@ -93,7 +93,7 @@ export default function Home() {
         {downloadPath.length > 0 && (
           <a
             href={downloadPath}
-            download={inputName + '.pdf'}
+            download
             target="__blank"
             className="text-green-600 underline hover:text-green-700"
           >
