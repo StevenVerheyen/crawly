@@ -49,6 +49,7 @@ app.use(cors());
 
 app.use(fileupload());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/pdf', express.static(path.join(__dirname, 'public/pdf')));
 
 // mount routers
 app.use('/api/create/', generateRoute);
