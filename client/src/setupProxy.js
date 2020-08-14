@@ -5,6 +5,6 @@ module.exports = function (app) {
     createProxyMiddleware('/api/**', { target: 'http://localhost:5000' })
   );
   app.use(
-    createProxyMiddleware('/uploads/**', { target: 'http://localhost:5000' })
+    createProxyMiddleware('/pdfs/**', { target: 'http://localhost:5000' })
   );
 };
