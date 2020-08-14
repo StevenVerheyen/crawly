@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const colors = require('colors'); // pretty console output
 const errorHandler = require('./middleware/error');
 const fileupload = require('express-fileupload');
+const bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
 // security
 const helmet = require('helmet');
@@ -25,6 +27,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json()); // we only accept json type bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -36,7 +40,7 @@ app.use(helmet()); // adds extra security header items for requests
 app.use(xss()); // sanitizes request data
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 1000,
+  max: 100,
 });
 app.use(limiter); // limit requests per IP
 app.use(hpp()); // prevent request pollution
