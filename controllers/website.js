@@ -49,7 +49,7 @@ exports.crawl = asyncHandler(async (req, res, next) => {
     await browser.close();
     await res.status(200).json({
       success: true,
-      downloadUrl: `https://www.crawly.work/pdfs/${fileName}`,
+      downloadUrl: `localhost:5000/pdfs/${fileName}`,
     });
   } catch (error) {
     browser.close();
