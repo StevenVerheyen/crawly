@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/errorResponse');
 
 exports.generate = asyncHandler(async (req, res, next) => {
   //wrap inside a try block
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   const options = {
     path: `${process.env.FILE_UPLOAD_PATH}/generated_${Math.round(

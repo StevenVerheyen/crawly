@@ -38,7 +38,7 @@ exports.crawl = asyncHandler(async (req, res, next) => {
     }
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   try {
     const page = await browser.newPage();
     if (isMobile) {
