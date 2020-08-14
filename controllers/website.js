@@ -49,10 +49,20 @@ exports.crawl = asyncHandler(async (req, res, next) => {
     await browser.close();
     await res.status(200).json({
       success: true,
-      downloadUrl: `https://www.crawly.work/pdfs/${fileName}`,
+      fileName,
     });
   } catch (error) {
     browser.close();
     return next(new ErrorResponse(`error generating pdf: ${error}`, 500));
+  }
+});
+
+exports.downloadPdf = asyncHandler(async (req, res, next) => {
+  const fileName = req.params.fileName;
+  try {
+    const file = `public/pdfs/${fileName}`;
+    res.download(file);
+  } catch (err) {
+    console.log(err);
   }
 });

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import GeneratePdfImage from '../assets/images/generate.png';
 import LabeledInputFieldText from '../external/react-uikit/Inputs/LabeledInputFieldText';
 import ButtonActionPrimary from '../external/react-uikit/Buttons/ButtonActionPrimary';
+import ButtonActionOutlineSecondary from '../external/react-uikit/Buttons/ButtonActionOutlineSecondary';
 import TextHead from '../external/react-uikit/Labels/TextHead';
-import { postCrawl } from '../external/Requesty';
+import { postCrawl, getDownloadPdf } from '../external/Requesty';
+import download from 'downloadjs';
 
 export default function Home() {
-  const [downloadPath, setDownloadPath] = useState('');
+  const [fileName, setFileName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [processing, setProcessing] = useState(false);
   const [inputUrl, setInputUrl] = useState('');
@@ -15,7 +17,7 @@ export default function Home() {
   async function onCrawlClick(e) {
     e.preventDefault();
     setErrorMessage('');
-    setDownloadPath('');
+    setFileName('');
     setProcessing(true);
     const body = JSON.stringify({
       name: inputName,
@@ -24,13 +26,23 @@ export default function Home() {
       landscape: true,
     });
     const postJson = await postCrawl(body);
+    console.log(postJson);
     if (postJson.success === true) {
       setProcessing(false);
-      setDownloadPath(postJson.downloadUrl);
+      setFileName(postJson.fileName);
     } else {
       setProcessing(false);
       setErrorMessage(postJson.error);
     }
+  }
+
+  async function onDownloadClick() {
+    if (fileName.length === 0) {
+      console.error('no filename specified');
+      return;
+    }
+    const getJsonBlob = await getDownloadPdf(fileName);
+    download(getJsonBlob, `${inputName}.pdf`);
   }
 
   return (
@@ -69,7 +81,7 @@ export default function Home() {
         </div>
         <div className="flex items-center my-3 mx-5">
           <ButtonActionPrimary
-            text="crawl"
+            text="Crawl"
             type="submit"
             disabled={processing}
           />
@@ -90,18 +102,11 @@ export default function Home() {
             </span>
           </span>
         )}
-        {downloadPath.length > 0 && (
-          <a
-            href={downloadPath}
-            download={inputName + '.pdf'}
-            target="__blank"
-            className="text-green-600 underline hover:text-green-700"
-          >
-            Download file{' '}
-            <span role="img" aria-label="thumbsup">
-              👍
-            </span>
-          </a>
+        {fileName.length > 0 && (
+          <ButtonActionOutlineSecondary
+            text="Download"
+            handleClick={onDownloadClick}
+          />
         )}
         {errorMessage.length > 0 && (
           <span className="text-red-600">{errorMessage}</span>
