@@ -1,6 +1,6 @@
 [submodule "client/src/external/react-uikit"]
 	path = client/src/external/react-uikit
 	url = https://github.com/StevenVerheyen/react-uikit.git
-[submodule "client/src/external/Requesty"]
-	path = client/src/external/Requesty
-	url = https://github.com/StevenVerheyen/Requesty.git
+[submodule "client/src/external/requesty"]
+	path = client/src/external/requesty
+	url=https://github.com/StevenVerheyen/requesty.git
