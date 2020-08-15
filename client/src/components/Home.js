@@ -42,7 +42,7 @@ export default function Home() {
       return;
     }
     const getJsonBlob = await getDownloadPdf(fileName);
-    download(getJsonBlob, `${inputName}.pdf`);
+    download(getJsonBlob, `${inputName}.pdf`, 'application/pdf');
   }
 
   return (
@@ -111,6 +111,18 @@ export default function Home() {
         {errorMessage.length > 0 && (
           <span className="text-red-600">{errorMessage}</span>
         )}
+      </div>
+
+      <div className="w-full mt-16 mb-4">
+        <p className="text-sm text-gray-500 text-center px-2">
+          This project is created with ❤️ by{' '}
+          <a
+            href="https://www.stevenverheyen.be"
+            className="text-green-500 hover:text-green-700"
+          >
+            Steven Verheyen
+          </a>
+        </p>
       </div>
     </div>
   );

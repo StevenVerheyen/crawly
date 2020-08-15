@@ -60,9 +60,9 @@ exports.crawl = asyncHandler(async (req, res, next) => {
 exports.downloadPdf = asyncHandler(async (req, res, next) => {
   const fileName = req.params.fileName;
   try {
-    const file = `public/pdfs/${fileName}`;
+    const file = `./public/pdfs/${fileName}`;
     res.download(file);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    return next(new ErrorResponse(`error downloading pdf: ${error}`, 500));
   }
 });
