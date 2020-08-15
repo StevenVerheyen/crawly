@@ -4,7 +4,7 @@ import LabeledInputFieldText from '../external/react-uikit/Inputs/LabeledInputFi
 import ButtonActionPrimary from '../external/react-uikit/Buttons/ButtonActionPrimary';
 import ButtonActionOutlineSecondary from '../external/react-uikit/Buttons/ButtonActionOutlineSecondary';
 import TextHead from '../external/react-uikit/Labels/TextHead';
-import { postCrawl, getDownloadPdf } from '../external/Requesty';
+import { postCrawl, getDownloadPdf } from '../external/requesty';
 import download from 'downloadjs';
 
 export default function Home() {
