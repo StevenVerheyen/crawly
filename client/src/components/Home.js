@@ -47,15 +47,18 @@ export default function Home() {
     setProcessing(true);
 
     // todo: add format
-    const body = JSON.stringify({
+    let body = {
       name: inputName,
       website: inputUrl,
       landscape: checkLandscape,
-      device: selectDeviceValue.value,
       width: inputWidth,
       height: inputHeight,
-    });
-    const postJson = await postCrawl(body);
+    };
+    if (selectDeviceValue && selectDeviceValue.value) {
+      body.device = selectDeviceValue.value;
+    }
+
+    const postJson = await postCrawl(JSON.stringify(body));
     console.log(postJson);
     if (postJson.success === true) {
       setProcessing(false);
@@ -114,6 +117,7 @@ export default function Home() {
             <Select
               className="w-72"
               isClearable={true}
+              isSearchable={true}
               placeholder="Select device"
               options={selectDeviceOptions}
               value={selectDeviceValue}
@@ -131,7 +135,8 @@ export default function Home() {
                   name="input-width"
                   label="WIDTH"
                   required={
-                    inputHeight > 0 && selectDeviceValue.value === undefined
+                    inputHeight > 0 &&
+                    (!selectDeviceValue || !selectDeviceValue.value)
                   }
                   value={inputWidth}
                   onChangeInput={(e) => setInputWidth(e.target.value)}
@@ -142,7 +147,8 @@ export default function Home() {
                   name="input-height"
                   label="HEIGHT"
                   required={
-                    inputWidth > 0 && selectDeviceValue.value === undefined
+                    inputWidth > 0 &&
+                    (!selectDeviceValue || !selectDeviceValue.value)
                   }
                   value={inputHeight}
                   onChangeInput={(e) => setInputHeight(e.target.value)}
@@ -159,14 +165,14 @@ export default function Home() {
               </label>
             </div>
           </div>
-          <label class="inline-flex items-center">
+          <label className="inline-flex items-center">
             <input
               type="checkbox"
               className="h-5 w-5"
               checked={checkLandscape}
               onChange={(e) => setCheckLandscape(e.target.checked)}
             />
-            <span class="ml-2 text-gray-700">Landscape</span>
+            <span className="ml-2 text-gray-700">Landscape</span>
           </label>
         </div>
         <div className="flex items-center my-3 mx-5">
