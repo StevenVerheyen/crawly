@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GeneratePdfImage from '../assets/images/generate.png';
 import LabeledInputFieldText from '../external/react-uikit/Inputs/LabeledInputFieldText';
+import LabeledInputFieldNumber from '../external/react-uikit/Inputs/LabeledInputFieldNumber';
 import ButtonActionPrimary from '../external/react-uikit/Buttons/ButtonActionPrimary';
 import ButtonActionOutlineSecondary from '../external/react-uikit/Buttons/ButtonActionOutlineSecondary';
 import TextHead from '../external/react-uikit/Labels/TextHead';
 import { postCrawl, getDownloadPdf } from '../external/requesty';
 import download from 'downloadjs';
+import CreatedBy from './CreatedBy';
+import Select from 'react-select';
 
 export default function Home() {
   const [fileName, setFileName] = useState('');
@@ -13,17 +16,44 @@ export default function Home() {
   const [processing, setProcessing] = useState(false);
   const [inputUrl, setInputUrl] = useState('');
   const [inputName, setInputName] = useState('');
+  const [inputWidth, setInputWidth] = useState('');
+  const [inputHeight, setInputHeight] = useState('');
+  const [checkLandscape, setCheckLandscape] = useState(false);
+  const [selectDeviceValue, setSelectDeviceValue] = useState('');
+  const [selectDeviceOptions, setSelectDeviceOptions] = useState([]);
+
+  useEffect(() => {
+    const options = [
+      { value: 'Moto G4', label: 'Moto G4' },
+      { value: 'Galaxy S5', label: 'Galaxy S5' },
+      { value: 'Pixel 2', label: 'Pixel 2' },
+      { value: 'Pixel 2 XL', label: 'Pixel 2 XL' },
+      { value: 'iPhone 5/SE', label: 'iPhone 5/SE' },
+      { value: 'iPhone 6/7/8', label: 'iPhone 6/7/8' },
+      { value: 'iPhone 6/7/8 Plus', label: 'iPhone 6/7/8 Plus' },
+      { value: 'iPhone X', label: 'iPhone X' },
+      { value: 'iPad', label: 'iPad' },
+      { value: 'iPad Pro', label: 'iPad Pro' },
+      { value: 'Surface Duo', label: 'Surface Duo' },
+      { value: 'Galaxy Fold', label: 'Galaxy Fold' },
+    ];
+    setSelectDeviceOptions(options);
+  }, []);
 
   async function onCrawlClick(e) {
     e.preventDefault();
     setErrorMessage('');
     setFileName('');
     setProcessing(true);
+
+    // todo: add format
     const body = JSON.stringify({
       name: inputName,
       website: inputUrl,
-      format: 'A2',
-      landscape: true,
+      landscape: checkLandscape,
+      device: selectDeviceValue.value,
+      width: inputWidth,
+      height: inputHeight,
     });
     const postJson = await postCrawl(body);
     console.log(postJson);
@@ -59,25 +89,85 @@ export default function Home() {
         </p>
       </div>
       <form onSubmit={onCrawlClick} className="w-full">
-        <div className="flex sm:flex-row flex-col justify-center items-center mx-5">
-          <LabeledInputFieldText
-            type="url"
-            name="input-url"
-            label="URL"
-            placeholder='Start with "https://www." or "http://www."'
-            required={true}
-            value={inputUrl}
-            onChangeInput={(e) => setInputUrl(e.target.value)}
-          />
-          <span className="mx-2"></span>
-          <LabeledInputFieldText
-            type="text"
-            name="input-name"
-            label="Filename"
-            required={true}
-            value={inputName}
-            onChangeInput={(e) => setInputName(e.target.value)}
-          />
+        <div className="flex flex-col space-y-3 mx-5">
+          <div className="w-full flex sm:flex-row flex-col space-x-2 justify-center items-center">
+            <LabeledInputFieldText
+              type="url"
+              name="input-url"
+              label="URL"
+              placeholder='Start with "https://www." or "http://www."'
+              required={true}
+              value={inputUrl}
+              onChangeInput={(e) => setInputUrl(e.target.value)}
+            />
+            <LabeledInputFieldText
+              type="text"
+              name="input-name"
+              label="Filename"
+              required={true}
+              value={inputName}
+              onChangeInput={(e) => setInputName(e.target.value)}
+            />
+          </div>
+
+          <div className="w-full flex sm:flex-row flex-col space-x-4 items-center">
+            <Select
+              className="w-72"
+              isClearable={true}
+              placeholder="Select device"
+              options={selectDeviceOptions}
+              value={selectDeviceValue}
+              onChange={(selectedOption) =>
+                setSelectDeviceValue(selectedOption)
+              }
+            />
+
+            <div className="sm:pl-24">
+              <div
+                id="input-dimentions"
+                className="w-1/2 flex sm:flex-row flex-col space-x-3 justify-center items-center"
+              >
+                <LabeledInputFieldNumber
+                  name="input-width"
+                  label="WIDTH"
+                  required={
+                    inputHeight > 0 && selectDeviceValue.value === undefined
+                  }
+                  value={inputWidth}
+                  onChangeInput={(e) => setInputWidth(e.target.value)}
+                  min={1}
+                  disabled={selectDeviceValue && selectDeviceValue.value}
+                />
+                <LabeledInputFieldNumber
+                  name="input-height"
+                  label="HEIGHT"
+                  required={
+                    inputWidth > 0 && selectDeviceValue.value === undefined
+                  }
+                  value={inputHeight}
+                  onChangeInput={(e) => setInputHeight(e.target.value)}
+                  min={1}
+                  disabled={selectDeviceValue && selectDeviceValue.value}
+                />
+              </div>
+              <label
+                htmlFor="input-dimentions"
+                className="text-gray-500 text-xs"
+              >
+                WARNING: Values in pixels. These values are ignored if a device.
+                is selected
+              </label>
+            </div>
+          </div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              className="h-5 w-5"
+              checked={checkLandscape}
+              onChange={(e) => setCheckLandscape(e.target.checked)}
+            />
+            <span class="ml-2 text-gray-700">Landscape</span>
+          </label>
         </div>
         <div className="flex items-center my-3 mx-5">
           <ButtonActionPrimary
@@ -113,17 +203,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="w-full mt-16 mb-4">
-        <p className="text-sm text-gray-500 text-center px-2">
-          This project is created with ❤️ by{' '}
-          <a
-            href="https://www.stevenverheyen.be"
-            className="text-green-500 hover:text-green-700"
-          >
-            Steven Verheyen
-          </a>
-        </p>
-      </div>
+      <CreatedBy />
     </div>
   );
 }
