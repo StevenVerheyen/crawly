@@ -20,6 +20,7 @@ const cors = require('cors');
 // route files
 const generateRoute = require('./routes/generate');
 const websiteRoute = require('./routes/website');
+const mailRoute = require('./routes/mails');
 
 // load env vars
 dotenv.config();
@@ -53,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // mount routers
 app.use('/api/create/', generateRoute);
 app.use('/api/website/', websiteRoute);
+app.use('/api/mails/', mailRoute);
 
 app.use(errorHandler); // ! keep this after mounting the routers
 
