@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // mount routers
 app.use('/api/create/', generateRoute);
 app.use('/api/website/', websiteRoute);
-app.use('/api/mails/', mailRoute);
+app.use('/api/mail/', mailRoute);
 
 app.use(errorHandler); // ! keep this after mounting the routers
 

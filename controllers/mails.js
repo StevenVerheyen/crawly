@@ -6,8 +6,8 @@ const sendEmail = require('../utils/sendEmail');
 // @route   POST /api/mails
 // @access  Public
 exports.sendContactMail = asyncHandler(async (req, res, next) => {
-  // `to` represents the mail address used in SendGril
   const { to, name, email, subject, message } = req.body;
+  console.log(req.body)
   try {
     await sendEmail({
       to,
@@ -16,11 +16,7 @@ exports.sendContactMail = asyncHandler(async (req, res, next) => {
       subject,
       message,
     });
-
-    res.status(200).json({
-      success: true,
-      data: 'Email sent',
-    });
+    res.status(200).json({success: true});
   } catch (err) {
     return next(new ErrorResponse('Email could not be sent', 500));
   }

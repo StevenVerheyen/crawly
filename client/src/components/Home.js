@@ -59,7 +59,6 @@ export default function Home() {
     }
 
     const postJson = await postCrawl(JSON.stringify(body));
-    console.log(postJson);
     if (postJson.success === true) {
       setProcessing(false);
       setFileName(postJson.fileName);
